@@ -1,0 +1,51 @@
+.indicator-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.connector {
+  width: 2px;
+  height: 24px;
+  margin-left: 18px;
+  opacity: 0.3;
+}
+
+.selic .connector {
+  background-color: #0d47a1;
+}
+
+.ipca .connector {
+  background-color: #2e7d32;
+}
+
+.pib .connector {
+  background-color: #455a64;
+}
+
+.cambio .connector {
+  background-color: #1565c0;
+}
+
+.economic-alert {
+  margin: 24px 0;
+  padding: 14px 18px;
+  background: #f5f7fa;
+  border-left: 4px solid #0d47a1;
+  font-size: 13px;
+  color: #37474f;
+}
+
+.chart-placeholder {
+  min-height: 220px;
+  border: 1px dashed #cfd8dc;
+  border-radius: 8px;
+  background: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: #607d8b;
+  margin-top: 8px;
+}

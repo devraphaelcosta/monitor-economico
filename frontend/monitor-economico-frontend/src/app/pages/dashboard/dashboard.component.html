@@ -1,0 +1,89 @@
+<!-- =======================
+         SELIC
+======================= -->
+<div class="indicator-section selic">
+  <app-indicator-card
+    title="SELIC"
+    icon="↗"
+    [value]="selic"
+    [trend]="tendenciaSelic"
+    [updatedAt]="selicAtualizadoEm"
+    cssClass="card-selic">
+  </app-indicator-card>
+
+  <div class="connector"></div>
+
+<app-economic-chart
+  chartId="chartSelic"
+  label="Taxa SELIC (%)"
+  [labels]="selicLabels"
+  [values]="selicHistorico"
+  [updatedAt]="selicAtualizadoEm"
+  color="#0d47a1">
+</app-economic-chart>
+</div>
+
+<!-- =======================
+         IPCA
+======================= -->
+<div class="indicator-section ipca">
+  <app-indicator-card
+    title="IPCA"
+    icon="≋"
+    [value]="ipca"
+    [trend]="tendenciaIpca"
+    [updatedAt]="ipcaAtualizadoEm"
+    cssClass="card-ipca">
+  </app-indicator-card>
+
+  <div class="connector"></div>
+
+<app-economic-chart
+  chartId="chartIpca"
+  label="IPCA (%)"
+  [labels]="ipcaLabels"
+  [values]="ipcaHistorico"
+  color="#2e7d32">
+</app-economic-chart>
+</div>
+
+<ng-container *ngIf="pibHistorico.length > 0; else pibIndisponivel">
+  <app-economic-chart
+    chartId="chartPib"
+    label="Variação do PIB (%)"
+    [labels]="pibLabels"
+    [values]="pibHistorico"
+    color="#455a64">
+  </app-economic-chart>
+</ng-container>
+
+<ng-template #pibIndisponivel>
+  <div class="chart-placeholder pib">
+    Gráfico indisponível no momento
+  </div>
+</ng-template>
+
+
+<!-- =======================
+         CÂMBIO
+======================= -->
+<div class="indicator-section cambio">
+  <app-indicator-card
+    title="CÂMBIO"
+    icon="⇄"
+    [value]="cambio"
+    [trend]="tendenciaCambio"
+    [updatedAt]="cambioAtualizadoEm"
+    cssClass="card-cambio">
+  </app-indicator-card>
+
+  <div class="connector"></div>
+
+<app-economic-chart
+  chartId="chartCambio"
+  label="Câmbio (R$)"
+  [labels]="cambioLabels"
+  [values]="cambioHistorico"
+  color="#1565c0">
+</app-economic-chart>
+</div>

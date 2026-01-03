@@ -1,0 +1,42 @@
+/* Reset leve */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  background-color: #f4f6f8;
+  color: #263238;
+}
+
+/* Header institucional */
+.app-header {
+  background: #0b3c5d; // azul institucional
+  color: #ffffff;
+  padding: 20px 0;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.header-content h1 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.header-content span {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+/* Área principal */
+.app-container {
+  max-width: 1200px;
+  margin: 32px auto;
+  padding: 0 24px;
+}
