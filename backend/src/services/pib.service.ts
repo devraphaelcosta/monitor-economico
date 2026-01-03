@@ -1,35 +1,48 @@
 import axios from 'axios';
 
+const PIB_BCB_URL =
+  'https://api.bcb.gov.br/dados/serie/bcdata.sgs.4380/dados?formato=json';
+
+function calcularVariacaoPercentual(atual: number, anterior: number): number {
+  return ((atual - anterior) / anterior) * 100;
+}
+
+/* =======================
+   CARD → VARIAÇÃO %
+======================= */
 export async function obterPib() {
-  const url =
-    'https://servicodados.ibge.gov.br/api/v3/agregados/5932/periodos/-1/variaveis/6560?localidades=N1[all]';
+  const response = await axios.get(PIB_BCB_URL);
+  const dados = response.data;
 
-  try {
-    const response = await axios.get(url);
-
-    const serie =
-      response.data[0]?.resultados[0]?.series[0]?.serie;
-
-    if (!serie) {
-      throw new Error('Estrutura inesperada do SIDRA');
-    }
-
-    const periodo = Object.keys(serie)[0];
-    const valor = serie[periodo];
-
-    if (!valor || valor === '...') {
-      throw new Error('PIB ainda não divulgado');
-    }
-
-    return {
-      valor,
-      periodo,
-    };
-  } catch (error) {
-    // Fallback institucional
-    return {
-      valor: 'Em atualização',
-      periodo: 'Fonte: IBGE',
-    };
+  if (!dados || dados.length < 2) {
+    throw new Error('Dados insuficientes para cálculo do PIB');
   }
+
+  const ultimo = dados[dados.length - 1];
+  const penultimo = dados[dados.length - 2];
+
+  const variacao = calcularVariacaoPercentual(
+    Number(ultimo.valor),
+    Number(penultimo.valor)
+  );
+
+  return {
+    valor: `${variacao.toFixed(2)}%`,
+    periodo: ultimo.data,
+  };
+}
+
+/* =======================
+   GRÁFICO → ÍNDICE
+======================= */
+export async function obterHistoricoPib() {
+  const response = await axios.get(PIB_BCB_URL);
+
+  const historico = response.data.map((item: any) => ({
+    data: item.data,
+    valor: Number(item.valor), // ÍNDICE, sem %
+  }));
+
+  // últimos 5 anos ≈ 20 trimestres
+  return historico.slice(-20);
 }

@@ -40,8 +40,7 @@ cambioAtualizadoEm = '';
 tendenciaSelic = '';
 tendenciaIpca = '';
 tendenciaCambio = '';
-
-
+tendenciaPib = '';
 
   /* =======================
      DADOS DOS GRÁFICOS
@@ -155,25 +154,43 @@ this.indicadoresService.obterIpca().subscribe({
 });
 
 
-    /* =======================
-       PIB (API INCONSISTENTE)
-       → gráfico NÃO aparece
-    ======================= */
+/* =======================
+   PIB
+======================= */
 this.indicadoresService.obterPib().subscribe({
   next: (res) => {
     this.pib = res.valor;
     this.pibAtualizadoEm = res.periodo;
+
+    const valorNumerico = Number(
+      res.valor.replace('%', '').replace(',', '.')
+    );
+
+    if (valorNumerico > 0) {
+      this.tendenciaPib = '↑ Em alta';
+    } else if (valorNumerico < 0) {
+      this.tendenciaPib = '↓ Em queda';
+    } else {
+      this.tendenciaPib = '→ Estável';
+    }
   },
   error: () => {
     this.pib = 'Indisponível';
     this.pibAtualizadoEm = '';
+    this.tendenciaPib = '';
   },
 });
 
-
-    // ⚠️ Sem histórico → mantém arrays vazios
+this.indicadoresService.obterHistoricoPib().subscribe({
+  next: (dados) => {
+    this.pibLabels = dados.map(d => d.data);
+    this.pibHistorico = dados.map(d => d.valor);
+  },
+  error: () => {
     this.pibLabels = [];
     this.pibHistorico = [];
+  },
+});
 
     /* =======================
        CÂMBIO

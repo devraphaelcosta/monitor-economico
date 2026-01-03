@@ -51,8 +51,18 @@
 <!-- =======================
          PIB
 ======================= -->
+<div class="indicator-section pib">
+  <app-indicator-card
+    title="PIB"
+    icon="Δ"
+    [value]="pib"
+    [trend]="tendenciaPib"
+    [updatedAt]="pibAtualizadoEm"
+    cssClass="card-pib">
+  </app-indicator-card>
 
-<ng-container *ngIf="pibHistorico.length > 0; else pibIndisponivel">
+  <div class="connector"></div>
+
   <app-economic-chart
     chartId="chartPib"
     label="Variação do PIB (%)"
@@ -60,13 +70,7 @@
     [values]="pibHistorico"
     color="#455a64">
   </app-economic-chart>
-</ng-container>
-
-<ng-template #pibIndisponivel>
-  <div class="chart-placeholder pib">
-    Gráfico indisponível no momento
-  </div>
-</ng-template>
+</div>
 
 
 <!-- =======================
