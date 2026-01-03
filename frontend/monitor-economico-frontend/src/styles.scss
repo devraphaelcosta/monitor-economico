@@ -1,4 +1,6 @@
-/* Reset leve */
+/* =======================
+   RESET GLOBAL
+======================= */
 * {
   margin: 0;
   padding: 0;
@@ -11,30 +13,49 @@ body {
   color: #263238;
 }
 
-/* Header institucional */
+/* =======================
+   HEADER INSTITUCIONAL
+======================= */
 .app-header {
-  background: #0b3c5d; // azul institucional
+  background-color: #0b3c5d; /* azul institucional */
   color: #ffffff;
-  padding: 20px 0;
+  border-bottom: 4px solid #0d47a1;
 }
 
 .header-content {
   max-width: 1200px;
+    height: 113px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 18px 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.header-content h1 {
-  font-size: 22px;
+/* Texto do header */
+.header-text h1 {
+  font-size: 32px;
   font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
-.header-content span {
-  font-size: 13px;
+.header-text span {
+  display: block;
+  margin-top: 4px;
+  font-size: 18px;
   opacity: 0.85;
 }
 
-/* Área principal */
+/* Brasão / Logo */
+.header-logo img {
+  height: 94px;
+  opacity: 0.95;
+}
+
+/* =======================
+   ÁREA PRINCIPAL
+======================= */
 .app-container {
   max-width: 1200px;
   margin: 32px auto;

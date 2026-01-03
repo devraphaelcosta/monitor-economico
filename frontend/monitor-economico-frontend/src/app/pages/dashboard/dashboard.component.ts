@@ -117,7 +117,7 @@ this.indicadoresService.obterHistoricoSelic().subscribe({
 this.indicadoresService.obterIpca().subscribe({
   next: (res) => {
     this.ipca = `${res.valor}%`;
-    this.ipcaAtualizadoEm = res.periodo;
+    this.ipcaAtualizadoEm = this.formatarPeriodoIpca(res.periodo);
   },
   error: () => {
     this.ipca = 'Indisponível';
@@ -126,9 +126,12 @@ this.indicadoresService.obterIpca().subscribe({
 });
 
 
+
   this.indicadoresService.obterHistoricoIpca().subscribe({
   next: (dados) => {
-    this.ipcaLabels = dados.map(d => d.data);
+    this.ipcaLabels = dados.map(d =>
+  this.formatarPeriodoIpca(d.data)
+);
     this.ipcaHistorico = dados.map(d => Number(d.valor));
 
     if (this.ipcaHistorico.length >= 2) {
@@ -213,4 +216,16 @@ this.indicadoresService.obterHistoricoCambio().subscribe({
 });
 
   }
+
+  formatarPeriodoIpca(periodo: string): string {
+  if (!periodo || periodo.length !== 6) {
+    return periodo;
+  }
+
+  const ano = periodo.substring(0, 4);
+  const mes = periodo.substring(4, 6);
+
+  return `${mes}/${ano}`;
+}
+
 }
