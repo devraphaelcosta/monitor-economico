@@ -1,53 +1,32 @@
 import axios from 'axios';
+import { parseMesAno, validarIntervalo, formatarBCB } from '../utils/date.utils';
 
-/**
- * SELIC ATUAL (card)
- */
 export async function obterSelic() {
   const url =
     'https://api.bcb.gov.br/dados/serie/bcdata.sgs.4189/dados?formato=json';
+  const dados = (await axios.get(url)).data;
+  const ultimo = dados[dados.length - 1];
 
-  try {
-    const response = await axios.get(url);
-    const dados = response.data;
-
-    const ultimo = dados[dados.length - 1];
-
-    if (!ultimo?.valor) {
-      throw new Error('SELIC indisponível');
-    }
-
-    return {
-      valor: ultimo.valor,
-      data: ultimo.data,
-    };
-  } catch {
-    return {
-      valor: 'Indisponível',
-      data: '',
-    };
-  }
+  return {
+    valor: ultimo.valor,
+    data: ultimo.data,
+  };
 }
 
-/**
- * HISTÓRICO DA SELIC (gráfico)
- */
-export async function obterHistoricoSelic() {
+export async function obterHistoricoSelic(inicio?: string, fim?: string) {
+  const inicioDate = inicio ? parseMesAno(inicio) : new Date(new Date().setMonth(new Date().getMonth() - 12));
+  const fimDate = fim ? parseMesAno(fim) : new Date();
+
+  validarIntervalo(inicioDate, fimDate);
+
   const url =
-    'https://api.bcb.gov.br/dados/serie/bcdata.sgs.4189/dados?formato=json';
+    `https://api.bcb.gov.br/dados/serie/bcdata.sgs.4189/dados` +
+    `?formato=json&dataInicial=${formatarBCB(inicioDate)}&dataFinal=${formatarBCB(fimDate)}`;
 
-  try {
-    const response = await axios.get(url);
-    const dados = response.data;
+  const dados = (await axios.get(url)).data;
 
-    // últimos 12 registros
-    const ultimos = dados.slice(-12);
-
-    return ultimos.map((item: any) => ({
-      data: item.data,
-      valor: Number(item.valor),
-    }));
-  } catch {
-    return [];
-  }
+  return dados.map((item: any) => ({
+    data: item.data,
+    valor: Number(item.valor),
+  }));
 }

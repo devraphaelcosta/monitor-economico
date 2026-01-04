@@ -1,4 +1,13 @@
 <!-- =======================
+     FILTRO GLOBAL
+======================= -->
+<div class="filter-actions">
+  <button class="filter-btn" (click)="aplicarFiltro()">
+    Aplicar filtro de datas
+  </button>
+</div>
+
+  <!-- =======================
      SELIC
 ======================= -->
 <div class="indicator-wrapper selic">
@@ -8,11 +17,25 @@
     Incluir SELIC no relatório
   </label>
 
-  <div
-  id="export-selic"
-    class="indicator-section"
-    [class.selected]="indicadoresSelecionados.selic"
-  >
+  <!-- Filtro de datas -->
+  <div class="date-filter">
+    <input
+      type="month"
+      [(ngModel)]="selicInicio"
+      [min]="limiteQuatroAnos.toISOString().substring(0,7)"
+      [max]="hoje.toISOString().substring(0,7)"
+    />
+    <span>até</span>
+    <input
+      type="month"
+      [(ngModel)]="selicFim"
+      [min]="limiteQuatroAnos.toISOString().substring(0,7)"
+      [max]="hoje.toISOString().substring(0,7)"
+    />
+  </div>
+
+  <div id="export-selic" class="indicator-section">
+
     <app-indicator-card
       title="SELIC"
       icon="↗"
@@ -25,14 +48,14 @@
     <div class="connector"></div>
 
     <app-economic-chart
-      chartId="chartSelic"
       label="Taxa SELIC (%)"
       [labels]="selicLabels"
       [values]="selicHistorico"
+      [periodo]="selicInicio && selicFim ? (selicInicio + ' - ' + selicFim) : ''"
       color="#0d47a1">
     </app-economic-chart>
-  </div>
 
+  </div>
 </div>
 
 <!-- =======================
@@ -45,11 +68,24 @@
     Incluir IPCA no relatório
   </label>
 
-  <div
-  id="export-ipca"
-    class="indicator-section"
-    [class.selected]="indicadoresSelecionados.ipca"
-  >
+  <div class="date-filter">
+    <input
+      type="month"
+      [(ngModel)]="ipcaInicio"
+      [min]="limiteQuatroAnos.toISOString().substring(0,7)"
+      [max]="hoje.toISOString().substring(0,7)"
+    />
+    <span>até</span>
+    <input
+      type="month"
+      [(ngModel)]="ipcaFim"
+      [min]="limiteQuatroAnos.toISOString().substring(0,7)"
+      [max]="hoje.toISOString().substring(0,7)"
+    />
+  </div>
+
+  <div id="export-ipca" class="indicator-section">
+
     <app-indicator-card
       title="IPCA"
       icon="≋"
@@ -62,14 +98,14 @@
     <div class="connector"></div>
 
     <app-economic-chart
-      chartId="chartIpca"
       label="IPCA (%)"
       [labels]="ipcaLabels"
       [values]="ipcaHistorico"
+      [periodo]="ipcaInicio && ipcaFim ? (ipcaInicio + ' - ' + ipcaFim) : ''"
       color="#2e7d32">
     </app-economic-chart>
-  </div>
 
+  </div>
 </div>
 
 <!-- =======================
@@ -82,11 +118,24 @@
     Incluir PIB no relatório
   </label>
 
-  <div
-  id="export-pib"
-    class="indicator-section"
-    [class.selected]="indicadoresSelecionados.pib"
-  >
+  <div class="date-filter">
+    <input
+      type="month"
+      [(ngModel)]="pibInicio"
+      [min]="limiteQuatroAnos.toISOString().substring(0,7)"
+      [max]="hoje.toISOString().substring(0,7)"
+    />
+    <span>até</span>
+    <input
+      type="month"
+      [(ngModel)]="pibFim"
+      [min]="limiteQuatroAnos.toISOString().substring(0,7)"
+      [max]="hoje.toISOString().substring(0,7)"
+    />
+  </div>
+
+  <div id="export-pib" class="indicator-section">
+
     <app-indicator-card
       title="PIB"
       icon="Δ"
@@ -99,14 +148,14 @@
     <div class="connector"></div>
 
     <app-economic-chart
-      chartId="chartPib"
       label="Índice do PIB"
       [labels]="pibLabels"
       [values]="pibHistorico"
+      [periodo]="pibInicio && pibFim ? (pibInicio + ' - ' + pibFim) : ''"
       color="#455a64">
     </app-economic-chart>
-  </div>
 
+  </div>
 </div>
 
 <!-- =======================
@@ -119,11 +168,24 @@
     Incluir Câmbio no relatório
   </label>
 
-  <div
-  id="export-cambio"
-    class="indicator-section"
-    [class.selected]="indicadoresSelecionados.cambio"
-  >
+  <div class="date-filter">
+    <input
+      type="date"
+      [(ngModel)]="cambioInicio"
+      [min]="limiteQuatroAnos.toISOString().split('T')[0]"
+      [max]="hoje.toISOString().split('T')[0]"
+    />
+    <span>até</span>
+    <input
+      type="date"
+      [(ngModel)]="cambioFim"
+      [min]="limiteQuatroAnos.toISOString().split('T')[0]"
+      [max]="hoje.toISOString().split('T')[0]"
+    />
+  </div>
+
+  <div id="export-cambio" class="indicator-section">
+
     <app-indicator-card
       title="CÂMBIO"
       icon="⇄"
@@ -136,18 +198,22 @@
     <div class="connector"></div>
 
     <app-economic-chart
-      chartId="chartCambio"
       label="Câmbio (R$)"
       [labels]="cambioLabels"
       [values]="cambioHistorico"
+      [periodo]="cambioInicio && cambioFim ? (cambioInicio + ' - ' + cambioFim) : ''"
       color="#1565c0">
     </app-economic-chart>
-  </div>
 
+  </div>
 </div>
 
 <!-- =======================
-     EXPORTAÇÃO
+     AÇÕES
+======================= -->
+
+<!-- =======================
+     AÇÕES
 ======================= -->
 <div class="export-actions">
   <button class="export-btn" (click)="exportarPDF()">

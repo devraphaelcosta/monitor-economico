@@ -1,4 +1,11 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import Chart from 'chart.js/auto';
 
 @Component({
@@ -9,30 +16,29 @@ import Chart from 'chart.js/auto';
 })
 export class EconomicChartComponent implements OnChanges {
 
-  @Input() chartId!: string;
   @Input() label!: string;
   @Input() labels: string[] = [];
   @Input() values: number[] = [];
   @Input() color = '#0d47a1';
-  @Input() updatedAt?: string;
+  @Input() periodo?: string;
 
+  @ViewChild('chartCanvas', { static: true })
+  canvasRef!: ElementRef<HTMLCanvasElement>;
 
   private chart: Chart | null = null;
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (!this.labels?.length || !this.values?.length) {
-      return;
-    }
+  ngOnChanges(_: SimpleChanges): void {
+    if (!this.labels.length || !this.values.length) return;
 
-    const canvas = document.getElementById(this.chartId) as HTMLCanvasElement;
-    if (!canvas) return;
+    setTimeout(() => this.renderChart(), 0);
+  }
 
-    // Evita gráfico duplicado
+  private renderChart() {
     if (this.chart) {
       this.chart.destroy();
     }
 
-    this.chart = new Chart(canvas, {
+    this.chart = new Chart(this.canvasRef.nativeElement, {
       type: 'line',
       data: {
         labels: this.labels,
@@ -50,6 +56,7 @@ export class EconomicChartComponent implements OnChanges {
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: { display: false },
         },

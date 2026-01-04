@@ -21,9 +21,6 @@ import jsPDF from 'jspdf';
 })
 export class DashboardComponent implements OnInit {
 
-  /* =======================
-     CONTROLE DE SELEÇÃO
-  ======================= */
   indicadoresSelecionados = {
     selic: false,
     ipca: false,
@@ -31,33 +28,21 @@ export class DashboardComponent implements OnInit {
     cambio: false,
   };
 
-  /* =======================
-     VALORES DOS CARDS
-  ======================= */
   selic = 'Carregando...';
   ipca = 'Carregando...';
   pib = 'Carregando...';
   cambio = 'Carregando...';
 
-  /* =======================
-     DATAS
-  ======================= */
   selicAtualizadoEm = '';
   ipcaAtualizadoEm = '';
   pibAtualizadoEm = '';
   cambioAtualizadoEm = '';
 
-  /* =======================
-     TENDÊNCIAS
-  ======================= */
   tendenciaSelic = '';
   tendenciaIpca = '';
   tendenciaPib = '';
   tendenciaCambio = '';
 
-  /* =======================
-     DADOS DOS GRÁFICOS
-  ======================= */
   selicLabels: string[] = [];
   selicHistorico: number[] = [];
 
@@ -70,44 +55,95 @@ export class DashboardComponent implements OnInit {
   cambioLabels: string[] = [];
   cambioHistorico: number[] = [];
 
+  // ======================
+  // FILTROS DE DATA
+  // ======================
+  selicInicio = '';
+  selicFim = '';
+
+  ipcaInicio = '';
+  ipcaFim = '';
+
+  pibInicio = '';
+  pibFim = '';
+
+  cambioInicio = '';
+  cambioFim = '';
+
+  hoje = new Date();
+  limiteQuatroAnos = new Date(
+    new Date().setFullYear(new Date().getFullYear() - 4)
+  );
+
   constructor(private indicadoresService: IndicadoresService) {}
 
   ngOnInit(): void {
+    this.definirDatasPadrao();
+    this.carregarIndicadores();
+  }
 
-    /* =======================
-       SELIC
-    ======================= */
+  definirDatasPadrao() {
+    const hoje = new Date();
+
+    const umAnoAtras = new Date();
+    umAnoAtras.setFullYear(hoje.getFullYear() - 1);
+
+    const trintaDiasAtras = new Date();
+    trintaDiasAtras.setDate(hoje.getDate() - 30);
+
+    // Mensais
+    this.selicInicio = this.formatarMesAno(umAnoAtras);
+    this.selicFim = this.formatarMesAno(hoje);
+
+    this.ipcaInicio = this.formatarMesAno(umAnoAtras);
+    this.ipcaFim = this.formatarMesAno(hoje);
+
+    this.pibInicio = this.formatarMesAno(umAnoAtras);
+    this.pibFim = this.formatarMesAno(hoje);
+
+    // Diário
+    this.cambioInicio = this.formatarData(trintaDiasAtras);
+    this.cambioFim = this.formatarData(hoje);
+  }
+
+  aplicarFiltro() {
+    this.carregarIndicadores();
+  }
+
+  carregarIndicadores() {
+
+    // ===== SELIC =====
     this.indicadoresService.obterSelic().subscribe(res => {
-      const valor = Number(res.valor);
+      const v = Number(res.valor);
       this.selic = `${res.valor}%`;
       this.selicAtualizadoEm = res.data;
 
-      if (valor > 10) this.tendenciaSelic = '↑ Em alta';
-      else if (valor > 5) this.tendenciaSelic = '→ Moderada';
+      if (v > 10) this.tendenciaSelic = '↑ Em alta';
+      else if (v > 5) this.tendenciaSelic = '→ Moderada';
       else this.tendenciaSelic = '↓ Baixa';
     });
 
-    this.indicadoresService.obterHistoricoSelic().subscribe(dados => {
-      this.selicLabels = dados.map(d => d.data);
-      this.selicHistorico = dados.map(d => Number(d.valor));
-    });
+    this.indicadoresService
+      .obterHistoricoSelic(this.selicInicio, this.selicFim)
+      .subscribe(dados => {
+        this.selicLabels = dados.map(d => d.data);
+        this.selicHistorico = dados.map(d => d.valor);
+      });
 
-    /* =======================
-       IPCA
-    ======================= */
+    // ===== IPCA =====
     this.indicadoresService.obterIpca().subscribe(res => {
       this.ipca = `${res.valor}%`;
       this.ipcaAtualizadoEm = this.formatarPeriodoIpca(res.periodo);
     });
 
-    this.indicadoresService.obterHistoricoIpca().subscribe(dados => {
-      this.ipcaLabels = dados.map(d => this.formatarPeriodoIpca(d.data));
-      this.ipcaHistorico = dados.map(d => Number(d.valor));
-    });
+    this.indicadoresService
+      .obterHistoricoIpca(this.ipcaInicio, this.ipcaFim)
+      .subscribe(dados => {
+        this.ipcaLabels = dados.map(d => this.formatarPeriodoIpca(d.data));
+        this.ipcaHistorico = dados.map(d => d.valor);
+      });
 
-    /* =======================
-       PIB
-    ======================= */
+    // ===== PIB =====
     this.indicadoresService.obterPib().subscribe(res => {
       this.pib = res.valor;
       this.pibAtualizadoEm = res.periodo;
@@ -118,82 +154,82 @@ export class DashboardComponent implements OnInit {
       else this.tendenciaPib = '→ Estável';
     });
 
-    this.indicadoresService.obterHistoricoPib().subscribe(dados => {
-      this.pibLabels = dados.map(d => d.data);
-      this.pibHistorico = dados.map(d => d.valor);
-    });
+    this.indicadoresService
+      .obterHistoricoPib(this.pibInicio, this.pibFim)
+      .subscribe(dados => {
+        this.pibLabels = dados.map(d => d.data);
+        this.pibHistorico = dados.map(d => d.valor);
+      });
 
-    /* =======================
-       CÂMBIO
-    ======================= */
+    // ===== CÂMBIO =====
     this.indicadoresService.obterCambio().subscribe(res => {
       this.cambio = `R$ ${Number(res.valor).toFixed(2)}`;
       this.cambioAtualizadoEm = res.data;
     });
 
-    this.indicadoresService.obterHistoricoCambio().subscribe(dados => {
-      this.cambioLabels = dados.map(d => d.data);
-      this.cambioHistorico = dados.map(d => Number(d.valor));
-    });
+    this.indicadoresService
+      .obterHistoricoCambio(this.cambioInicio, this.cambioFim)
+      .subscribe(dados => {
+        this.cambioLabels = dados.map(d => d.data);
+        this.cambioHistorico = dados.map(d => d.valor);
+      });
   }
 
-  /* =======================
-     UTILITÁRIOS
-  ======================= */
+  formatarMesAno(date: Date): string {
+    const mes = String(date.getMonth() + 1).padStart(2, '0');
+    return `${date.getFullYear()}-${mes}`;
+  }
+
+  formatarData(date: Date): string {
+    return date.toISOString().split('T')[0];
+  }
+
   formatarPeriodoIpca(periodo: string): string {
     if (!periodo || periodo.length !== 6) return periodo;
     return `${periodo.substring(4, 6)}/${periodo.substring(0, 4)}`;
   }
 
-  /* =======================
-     EXPORTAÇÃO PDF
-  ======================= */
-async exportarPDF() {
+  async exportarPDF() {
+    const nenhum =
+      !this.indicadoresSelecionados.selic &&
+      !this.indicadoresSelecionados.ipca &&
+      !this.indicadoresSelecionados.pib &&
+      !this.indicadoresSelecionados.cambio;
 
-  const nenhumSelecionado = !this.indicadoresSelecionados.selic &&
-                            !this.indicadoresSelecionados.ipca &&
-                            !this.indicadoresSelecionados.pib &&
-                            !this.indicadoresSelecionados.cambio;
-
-  if (nenhumSelecionado) {
-    alert('Selecione pelo menos um indicador para exportar o relatório.');
-    return;
-  }
-
-  const pdf = new jsPDF('p', 'mm', 'a4');
-  let yPosition = 10;
-
-  const indicadores = [
-    { id: 'export-selic', ativo: this.indicadoresSelecionados.selic },
-    { id: 'export-ipca', ativo: this.indicadoresSelecionados.ipca },
-    { id: 'export-pib', ativo: this.indicadoresSelecionados.pib },
-    { id: 'export-cambio', ativo: this.indicadoresSelecionados.cambio },
-  ];
-
-  for (const indicador of indicadores) {
-    if (!indicador.ativo) continue;
-
-    const element = document.getElementById(indicador.id);
-    if (!element) continue;
-
-    const canvas = await html2canvas(element, {
-      scale: 2,
-      backgroundColor: '#ffffff',
-    });
-
-    const imgData = canvas.toDataURL('image/png');
-    const imgWidth = 190;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-    if (yPosition + imgHeight > 280) {
-      pdf.addPage();
-      yPosition = 10;
+    if (nenhum) {
+      alert('Selecione pelo menos um indicador para exportar.');
+      return;
     }
 
-    pdf.addImage(imgData, 'PNG', 10, yPosition, imgWidth, imgHeight);
-    yPosition += imgHeight + 10;
-  }
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    let y = 10;
 
-  pdf.save('monitor-economico.pdf');
-}
+    const indicadores = [
+      { id: 'export-selic', ativo: this.indicadoresSelecionados.selic },
+      { id: 'export-ipca', ativo: this.indicadoresSelecionados.ipca },
+      { id: 'export-pib', ativo: this.indicadoresSelecionados.pib },
+      { id: 'export-cambio', ativo: this.indicadoresSelecionados.cambio },
+    ];
+
+    for (const ind of indicadores) {
+      if (!ind.ativo) continue;
+
+      const el = document.getElementById(ind.id);
+      if (!el) continue;
+
+      const canvas = await html2canvas(el, { scale: 2 });
+      const img = canvas.toDataURL('image/png');
+      const h = (canvas.height * 190) / canvas.width;
+
+      if (y + h > 280) {
+        pdf.addPage();
+        y = 10;
+      }
+
+      pdf.addImage(img, 'PNG', 10, y, 190, h);
+      y += h + 10;
+    }
+
+    pdf.save('monitor-economico.pdf');
+  }
 }

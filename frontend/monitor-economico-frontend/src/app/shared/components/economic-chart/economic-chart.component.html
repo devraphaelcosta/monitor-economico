@@ -1,7 +1,9 @@
 <div class="chart-container">
-  <canvas [id]="chartId"></canvas>
+  <div class="chart-canvas-wrapper">
+    <canvas #chartCanvas></canvas>
+  </div>
 
-  <div *ngIf="updatedAt" class="chart-meta">
-    Atualizado em: {{ updatedAt }}
+  <div *ngIf="periodo" class="chart-meta">
+    Período: {{ periodo }}
   </div>
 </div>

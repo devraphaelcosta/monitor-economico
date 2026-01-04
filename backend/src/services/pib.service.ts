@@ -1,30 +1,18 @@
 import axios from 'axios';
+import { parseMesAno, validarIntervalo } from '../utils/date.utils';
 
-const PIB_BCB_URL =
+const URL =
   'https://api.bcb.gov.br/dados/serie/bcdata.sgs.4380/dados?formato=json';
 
-function calcularVariacaoPercentual(atual: number, anterior: number): number {
-  return ((atual - anterior) / anterior) * 100;
-}
-
-/* =======================
-   CARD → VARIAÇÃO %
-======================= */
 export async function obterPib() {
-  const response = await axios.get(PIB_BCB_URL);
-  const dados = response.data;
-
-  if (!dados || dados.length < 2) {
-    throw new Error('Dados insuficientes para cálculo do PIB');
-  }
-
+  const dados = (await axios.get(URL)).data;
   const ultimo = dados[dados.length - 1];
   const penultimo = dados[dados.length - 2];
 
-  const variacao = calcularVariacaoPercentual(
-    Number(ultimo.valor),
-    Number(penultimo.valor)
-  );
+  const variacao =
+    ((Number(ultimo.valor) - Number(penultimo.valor)) /
+      Number(penultimo.valor)) *
+    100;
 
   return {
     valor: `${variacao.toFixed(2)}%`,
@@ -32,17 +20,16 @@ export async function obterPib() {
   };
 }
 
-/* =======================
-   GRÁFICO → ÍNDICE
-======================= */
-export async function obterHistoricoPib() {
-  const response = await axios.get(PIB_BCB_URL);
+export async function obterHistoricoPib(inicio?: string, fim?: string) {
+  const inicioDate = parseMesAno(inicio);
+  const fimDate = parseMesAno(fim);
 
-  const historico = response.data.map((item: any) => ({
-    data: item.data,
-    valor: Number(item.valor), // ÍNDICE, sem %
-  }));
+  validarIntervalo(inicioDate, fimDate);
 
-  // últimos 5 anos ≈ 20 trimestres
-  return historico.slice(-20);
+  const dados = (await axios.get(URL)).data;
+
+  return dados.filter((item: any) => {
+    const data = new Date(item.data.split('/').reverse().join('-'));
+    return data >= inicioDate && data <= fimDate;
+  });
 }

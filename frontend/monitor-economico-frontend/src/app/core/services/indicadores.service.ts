@@ -1,66 +1,77 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface SelicResponse {
-  valor: string;
-  data: string;
-}
-
-export interface CambioResponse {
-  valor: string;
-  data: string;
-}
-
-export interface IpcaResponse {
-  valor: string;
-  periodo: string;
-}
-
-export interface PibResponse {
-  valor: string;
-  periodo: string;
-}
 
 @Injectable({
   providedIn: 'root',
 })
 export class IndicadoresService {
-  private readonly apiUrl = 'http://localhost:3000/indicadores';
+
+  private apiUrl = 'http://localhost:3000/indicadores';
 
   constructor(private http: HttpClient) {}
 
-  obterSelic(): Observable<SelicResponse> {
-    return this.http.get<SelicResponse>(`${this.apiUrl}/selic`);
+  /* =======================
+     SELIC
+  ======================= */
+  obterSelic(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/selic`);
   }
 
-  obterCambio(): Observable<CambioResponse> {
-    return this.http.get<CambioResponse>(`${this.apiUrl}/cambio`);
+  obterHistoricoSelic(inicio?: string, fim?: string): Observable<any[]> {
+    let params = new HttpParams();
+
+    if (inicio) params = params.set('inicio', inicio);
+    if (fim) params = params.set('fim', fim);
+
+    return this.http.get<any[]>(`${this.apiUrl}/selic/historico`, { params });
   }
 
-  obterIpca(): Observable<IpcaResponse> {
-  return this.http.get<IpcaResponse>(`${this.apiUrl}/ipca`);
+  /* =======================
+     IPCA
+  ======================= */
+  obterIpca(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/ipca`);
   }
 
-obterPib(): Observable<PibResponse> {
-  return this.http.get<PibResponse>(`${this.apiUrl}/pib`);
+  obterHistoricoIpca(inicio?: string, fim?: string): Observable<any[]> {
+    let params = new HttpParams();
+
+    if (inicio) params = params.set('inicio', inicio);
+    if (fim) params = params.set('fim', fim);
+
+    return this.http.get<any[]>(`${this.apiUrl}/ipca/historico`, { params });
   }
 
-obterHistoricoSelic(): Observable<{ data: string; valor: number }[]> {
-  return this.http.get<{ data: string; valor: number }[]>(
-    `${this.apiUrl}/selic/historico`);
-}
-obterHistoricoIpca(): Observable<{ data: string; valor: number }[]> {
-  return this.http.get<{ data: string; valor: number }[]>(
-    `${this.apiUrl}/ipca/historico`);
-}
+  /* =======================
+     PIB
+  ======================= */
+  obterPib(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/pib`);
+  }
 
-obterHistoricoCambio(): Observable<{ data: string; valor: number }[]> {
-  return this.http.get<{ data: string; valor: number }[]>(
-    `${this.apiUrl}/cambio/historico`);
-}
-obterHistoricoPib(): Observable<{ data: string; valor: number }[]> {
-  return this.http.get<{ data: string; valor: number }[]>(
-    `${this.apiUrl}/pib/historico`);
-}
+  obterHistoricoPib(inicio?: string, fim?: string): Observable<any[]> {
+    let params = new HttpParams();
+
+    if (inicio) params = params.set('inicio', inicio);
+    if (fim) params = params.set('fim', fim);
+
+    return this.http.get<any[]>(`${this.apiUrl}/pib/historico`, { params });
+  }
+
+  /* =======================
+     CÂMBIO
+  ======================= */
+  obterCambio(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/cambio`);
+  }
+
+  obterHistoricoCambio(inicio?: string, fim?: string): Observable<any[]> {
+    let params = new HttpParams();
+
+    if (inicio) params = params.set('inicio', inicio);
+    if (fim) params = params.set('fim', fim);
+
+    return this.http.get<any[]>(`${this.apiUrl}/cambio/historico`, { params });
+  }
 }

@@ -1,59 +1,42 @@
 import axios from 'axios';
+import { parseMesAno, validarIntervalo } from '../utils/date.utils';
 
-/* =======================
-   IPCA ATUAL (CARD)
-======================= */
 export async function obterIpca() {
   const url =
     'https://servicodados.ibge.gov.br/api/v3/agregados/1737/periodos/-1/variaveis/63?localidades=N1[all]';
 
-  try {
-    const response = await axios.get(url);
+  const response = await axios.get(url);
+  const serie = response.data[0]?.resultados[0]?.series[0]?.serie;
 
-    const serie =
-      response.data[0]?.resultados[0]?.series[0]?.serie;
+  const periodo = Object.keys(serie)[0];
 
-    if (!serie) {
-      throw new Error('IPCA indisponível');
-    }
-
-    const periodo = Object.keys(serie)[0];
-    const valor = serie[periodo];
-
-    if (!valor || valor === '...') {
-      throw new Error('IPCA ainda não divulgado');
-    }
-
-    return {
-      valor,
-      periodo,
-    };
-  } catch {
-    return {
-      valor: 'Em atualização',
-      periodo: 'Fonte: IBGE',
-    };
-  }
+  return {
+    valor: serie[periodo],
+    periodo,
+  };
 }
 
-/* =======================
-   IPCA HISTÓRICO (GRÁFICO)
-======================= */
-export async function obterHistoricoIpca() {
+export async function obterHistoricoIpca(inicio?: string, fim?: string) {
+  const inicioDate = parseMesAno(inicio);
+  const fimDate = parseMesAno(fim);
+
+  validarIntervalo(inicioDate, fimDate);
+
   const url =
-    'https://servicodados.ibge.gov.br/api/v3/agregados/1737/periodos/-12/variaveis/63?localidades=N1[all]';
+    `https://servicodados.ibge.gov.br/api/v3/agregados/1737/periodos/all/variaveis/63?localidades=N1[all]`;
 
   const response = await axios.get(url);
+  const serie = response.data[0]?.resultados[0]?.series[0]?.serie;
 
-  const serie =
-    response.data[0]?.resultados[0]?.series[0]?.serie;
-
-  if (!serie) {
-    return [];
-  }
-
-  return Object.keys(serie).map((periodo) => ({
-    data: periodo,
-    valor: Number(serie[periodo]),
-  }));
+  return Object.keys(serie)
+    .filter(p => {
+      const ano = Number(p.substring(0, 4));
+      const mes = Number(p.substring(4, 6)) - 1;
+      const data = new Date(ano, mes, 1);
+      return data >= inicioDate && data <= fimDate;
+    })
+    .map(p => ({
+      data: p,
+      valor: Number(serie[p]),
+    }));
 }
