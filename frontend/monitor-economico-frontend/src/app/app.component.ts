@@ -10,4 +10,6 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'monitor-economico-frontend';
+
+  currentYear: number = new Date().getFullYear();
 }

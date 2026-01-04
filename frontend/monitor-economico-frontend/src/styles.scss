@@ -11,6 +11,11 @@ body {
   font-family: 'Segoe UI', Roboto, Arial, sans-serif;
   background-color: #f4f6f8;
   color: #263238;
+
+  /* garante footer no final da página */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* =======================
@@ -24,7 +29,7 @@ body {
 
 .header-content {
   max-width: 1200px;
-    height: 113px;
+  height: 113px;
   margin: 0 auto;
   padding: 18px 24px;
 
@@ -60,4 +65,42 @@ body {
   max-width: 1200px;
   margin: 32px auto;
   padding: 0 24px;
+
+  /* empurra o footer para baixo */
+  flex: 1;
+}
+
+/* =======================
+   FOOTER INSTITUCIONAL
+======================= */
+.app-footer {
+  background-color: #0b3c5d;
+  color: #ffffff;
+  border-top: 4px solid #0d47a1;
+  padding: 16px 0;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.footer-title {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.footer-text {
+  margin: 2px 0;
+  opacity: 0.85;
+}
+
+.footer-author {
+  margin-top: 8px;
+  font-size: 13px;
+  opacity: 0.75;
 }
