@@ -1,10 +1,72 @@
+/* =======================
+   WRAPPER
+======================= */
+.indicator-wrapper {
+  margin-bottom: 28px;
+}
+
+/* =======================
+   SEÇÃO DO INDICADOR
+======================= */
 .indicator-section {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-bottom: 32px;
+  padding: 14px;
+  border-radius: 8px;
+  background: #ffffff;
+  transition: border 0.2s ease, background 0.2s ease;
 }
 
+
+/* =======================
+   SELETOR (CHECKBOX CUSTOM)
+======================= */
+.selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #37474f;
+  margin-bottom: 6px;
+  cursor: pointer;
+}
+
+/* Esconde checkbox nativo */
+.selector input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #032b3e;
+  border-radius: 4px;
+  display: grid;
+  place-content: center;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+/* Check interno */
+.selector input[type="checkbox"]::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  transform: scale(0);
+  background-color: #0b3c5d;
+  transition: transform 0.15s ease-in-out;
+}
+
+/* ✅ SELECIONADO → AZUL DO HEADER */
+.selector input[type="checkbox"]:checked {
+  background-color: #0b3c5d;
+}
+
+.selector input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+/* =======================
+   CONECTOR
+======================= */
 .connector {
   width: 2px;
   height: 24px;
@@ -28,6 +90,9 @@
   background-color: #1565c0;
 }
 
+/* =======================
+   ALERTA
+======================= */
 .economic-alert {
   margin: 24px 0;
   padding: 14px 18px;
@@ -37,15 +102,28 @@
   color: #37474f;
 }
 
-.chart-placeholder {
-  min-height: 220px;
-  border: 1px dashed #cfd8dc;
-  border-radius: 8px;
-  background: #fafafa;
+/* =======================
+   EXPORTAÇÃO
+======================= */
+.export-actions {
+  margin-top: 36px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  color: #607d8b;
-  margin-top: 8px;
+  justify-content: flex;
+}
+
+.export-actions button {
+  background: #0b3c5d;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.export-actions button:hover {
+  background: #08324d;
+  box-shadow: 0 4px 12px rgba(11, 60, 93, 0.25);
 }
