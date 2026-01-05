@@ -3,10 +3,17 @@
 ======================= -->
 <div class="indicator-wrapper selic">
 
-  <label class="selector">
-    <input type="checkbox" [(ngModel)]="indicadoresSelecionados.selic" />
-    Incluir SELIC no relatório
-  </label>
+<label class="selector">
+  <input type="checkbox" [(ngModel)]="indicadoresSelecionados.selic" />
+  Incluir SELIC no relatório
+
+  <span class="tooltip-container">
+    ?
+    <span class="tooltip-text">
+      Taxa básica de juros da economia brasileira, usada para controlar a inflação.
+    </span>
+  </span>
+</label>
 
   <div class="date-filter">
     <input
@@ -61,6 +68,13 @@
   <label class="selector">
     <input type="checkbox" [(ngModel)]="indicadoresSelecionados.ipca" />
     Incluir IPCA no relatório
+
+    <span class="tooltip-container">
+  ?
+  <span class="tooltip-text">
+    Índice oficial que mede a inflação no Brasil.
+  </span>
+</span>
   </label>
 
   <div class="date-filter">
@@ -116,6 +130,13 @@
   <label class="selector">
     <input type="checkbox" [(ngModel)]="indicadoresSelecionados.pib" />
     Incluir PIB no relatório
+
+    <span class="tooltip-container">
+  ?
+  <span class="tooltip-text">
+    Soma de todos os bens e serviços produzidos no país.
+  </span>
+</span>
   </label>
 
   <div class="date-filter">
@@ -171,6 +192,13 @@
   <label class="selector">
     <input type="checkbox" [(ngModel)]="indicadoresSelecionados.cambio" />
     Incluir Câmbio no relatório
+
+    <span class="tooltip-container">
+  ?
+  <span class="tooltip-text">
+    Valor da moeda brasileira em relação ao Dólar comercial (USD/BRL)
+  </span>
+</span>
   </label>
 
   <div class="date-filter">
