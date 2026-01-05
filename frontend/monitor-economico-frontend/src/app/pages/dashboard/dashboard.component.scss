@@ -1,7 +1,13 @@
+/* =======================
+   WRAPPER
+======================= */
 .indicator-wrapper {
   margin-bottom: 28px;
 }
 
+/* =======================
+   SEÇÃO DO INDICADOR
+======================= */
 .indicator-section {
   display: flex;
   flex-direction: column;
@@ -11,15 +17,76 @@
   background: #ffffff;
 }
 
+/* =======================
+   CHECKBOX CUSTOMIZADO
+======================= */
 .selector {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-size: 12px;
+  font-weight: 500;
   color: #37474f;
   margin-bottom: 6px;
+  cursor: pointer;
 }
 
+/* Esconde o checkbox nativo */
+.selector input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #b0bec5;
+  border-radius: 4px;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+/* Check interno */
+.selector input[type="checkbox"]::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  transform: scale(0);
+  transition: transform 0.12s ease-in-out;
+  border-radius: 2px;
+}
+
+/* =======================
+   CHECKBOX ATIVO POR INDICADOR
+======================= */
+.selic .selector input[type="checkbox"]:checked {
+  background-color: #0d47a1;
+  border-color: #0d47a1;
+}
+
+.ipca .selector input[type="checkbox"]:checked {
+  background-color: #2e7d32;
+  border-color: #2e7d32;
+}
+
+.pib .selector input[type="checkbox"]:checked {
+  background-color: #455a64;
+  border-color: #455a64;
+}
+
+.cambio .selector input[type="checkbox"]:checked {
+  background-color: #1565c0;
+  border-color: #1565c0;
+}
+
+/* Mostra o check */
+.selector input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+
+/* =======================
+   FILTRO DE DATAS
+======================= */
 .date-filter {
   display: flex;
   align-items: center;
@@ -34,6 +101,9 @@
   border: 1px solid #ccc;
 }
 
+/* =======================
+   CONECTOR
+======================= */
 .connector {
   width: 2px;
   height: 24px;
@@ -41,13 +111,16 @@
   opacity: 0.3;
 }
 
+/* =======================
+   EXPORTAÇÃO PDF
+======================= */
 .export-actions {
   margin-top: 36px;
 }
 
 .export-actions button {
   background: #0b3c5d;
-  color: #fff;
+  color: #ffffff;
   padding: 12px 20px;
   border-radius: 8px;
   border: none;
@@ -60,11 +133,14 @@
 .filter-actions {
   display: flex;
   justify-content: flex-start;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
+/* =======================
+   BOTÃO BASE
+======================= */
 .filter-btn {
-  background: #0b3c5d;
+  background: #0b3c5d; /* fallback */
   color: #ffffff;
   font-size: 14px;
   font-weight: 500;
@@ -76,6 +152,25 @@
 }
 
 .filter-btn:hover {
-  background: #08324d;
-  box-shadow: 0 4px 12px rgba(11, 60, 93, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  opacity: 0.95;
+}
+
+/* =======================
+   CORES POR INDICADOR
+======================= */
+.selic .filter-btn {
+  background: #0d47a1;
+}
+
+.ipca .filter-btn {
+  background: #2e7d32;
+}
+
+.pib .filter-btn {
+  background: #455a64;
+}
+
+.cambio .filter-btn {
+  background: #1565c0;
 }

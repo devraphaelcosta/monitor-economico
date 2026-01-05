@@ -1,13 +1,4 @@
 <!-- =======================
-     FILTRO GLOBAL
-======================= -->
-<div class="filter-actions">
-  <button class="filter-btn" (click)="aplicarFiltro()">
-    Aplicar filtro de datas
-  </button>
-</div>
-
-  <!-- =======================
      SELIC
 ======================= -->
 <div class="indicator-wrapper selic">
@@ -17,7 +8,6 @@
     Incluir SELIC no relatório
   </label>
 
-  <!-- Filtro de datas -->
   <div class="date-filter">
     <input
       type="month"
@@ -34,8 +24,13 @@
     />
   </div>
 
-  <div id="export-selic" class="indicator-section">
+  <div class="filter-actions">
+    <button class="filter-btn" (click)="aplicarFiltro()">
+      Aplicar filtro de datas
+    </button>
+  </div>
 
+  <div id="export-selic" class="indicator-section">
     <app-indicator-card
       title="SELIC"
       icon="↗"
@@ -54,8 +49,8 @@
       [periodo]="selicInicio && selicFim ? (selicInicio + ' - ' + selicFim) : ''"
       color="#0d47a1">
     </app-economic-chart>
-
   </div>
+
 </div>
 
 <!-- =======================
@@ -84,8 +79,13 @@
     />
   </div>
 
-  <div id="export-ipca" class="indicator-section">
+  <div class="filter-actions">
+    <button class="filter-btn" (click)="aplicarFiltro()">
+      Aplicar filtro de datas
+    </button>
+  </div>
 
+  <div id="export-ipca" class="indicator-section">
     <app-indicator-card
       title="IPCA"
       icon="≋"
@@ -104,8 +104,8 @@
       [periodo]="ipcaInicio && ipcaFim ? (ipcaInicio + ' - ' + ipcaFim) : ''"
       color="#2e7d32">
     </app-economic-chart>
-
   </div>
+
 </div>
 
 <!-- =======================
@@ -134,8 +134,13 @@
     />
   </div>
 
-  <div id="export-pib" class="indicator-section">
+  <div class="filter-actions">
+    <button class="filter-btn" (click)="aplicarFiltro()">
+      Aplicar filtro de datas
+    </button>
+  </div>
 
+  <div id="export-pib" class="indicator-section">
     <app-indicator-card
       title="PIB"
       icon="Δ"
@@ -154,8 +159,8 @@
       [periodo]="pibInicio && pibFim ? (pibInicio + ' - ' + pibFim) : ''"
       color="#455a64">
     </app-economic-chart>
-
   </div>
+
 </div>
 
 <!-- =======================
@@ -184,8 +189,13 @@
     />
   </div>
 
-  <div id="export-cambio" class="indicator-section">
+  <div class="filter-actions">
+    <button class="filter-btn" (click)="aplicarFiltro()">
+      Aplicar filtro de datas
+    </button>
+  </div>
 
+  <div id="export-cambio" class="indicator-section">
     <app-indicator-card
       title="CÂMBIO"
       icon="⇄"
@@ -204,16 +214,12 @@
       [periodo]="cambioInicio && cambioFim ? (cambioInicio + ' - ' + cambioFim) : ''"
       color="#1565c0">
     </app-economic-chart>
-
   </div>
+
 </div>
 
 <!-- =======================
-     AÇÕES
-======================= -->
-
-<!-- =======================
-     AÇÕES
+     EXPORTAÇÃO
 ======================= -->
 <div class="export-actions">
   <button class="export-btn" (click)="exportarPDF()">
