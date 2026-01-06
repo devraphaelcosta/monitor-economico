@@ -5,7 +5,7 @@ describe('Dashboard Econômico', () => {
     // Valida o título principal da página
 cy.get('h1')
   .should('be.visible')
-  .and('contain.text', 'gfgfffe de Monitoramento Econômico');
+  .and('contain.text', 'sdsddsse de Monitoramento Econômico');
 
 
     // Valida os indicadores principais
