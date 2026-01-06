@@ -1,4 +1,4 @@
-name: CI - Monitor Economico
+name: CI - Monitor Economico Frontend
 
 on:
   push:
@@ -9,6 +9,10 @@ on:
 jobs:
   frontend-tests:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend/monitor-economico-frontend
 
     steps:
       - name: Checkout código
