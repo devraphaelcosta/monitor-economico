@@ -15,19 +15,32 @@ jobs:
         working-directory: frontend/monitor-economico-frontend
 
     steps:
+      #Baixa o código
       - name: Checkout código
         uses: actions/checkout@v4
 
+      #Setup Node
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 18.18.0
 
+      #Instala dependências
       - name: Instalar dependências
         run: npm install
 
+      #Build do Angular
       - name: Build frontend
         run: npm run build
 
+      #Sobe frontend em background
+      - name: Subir frontend
+        run: npm run start &
+
+      #Espera frontend responder
+      - name: Aguardar frontend
+        run: npx wait-on http://localhost:4200
+
+      #Roda testes Cypress (headless)
       - name: Rodar testes Cypress
         run: npm run cypress:run
