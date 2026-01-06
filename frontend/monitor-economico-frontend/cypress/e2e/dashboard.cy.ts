@@ -6,17 +6,13 @@ describe('Dashboard Econômico', () => {
     // Valida o título principal da página
     cy.get('h1')
       .should('be.visible')
-      .and('contain.text', 'sdsddsse de Monitoramento Econômico');
+      .and('contain.text', 'Painel de Monitoramento Econômico');
 
     // Valida os indicadores principais
     cy.contains('SELIC').should('be.visible');
     cy.contains('IPCA').should('be.visible');
     cy.contains('CÂMBIO').should('be.visible');
     cy.contains('PIB').should('be.visible');
-  });
-
-  it('falha proposital', () => {
-    expect(true).to.equal(false);
   });
 
 });
