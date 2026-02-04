@@ -1,0 +1,40 @@
+<div class="backdrop" (click)="fechar()"></div>
+
+<div class="modal">
+  <h2>{{ modoCadastro ? 'Criar conta' : 'Entrar' }}</h2>
+
+  <form (ngSubmit)="submit()">
+    <input
+      *ngIf="modoCadastro"
+      type="text"
+      placeholder="Nome"
+      [(ngModel)]="nome"
+      name="nome"
+      required
+    />
+
+    <input
+      type="email"
+      placeholder="Email"
+      [(ngModel)]="email"
+      name="email"
+      required
+    />
+
+    <input
+      type="password"
+      placeholder="Senha"
+      [(ngModel)]="senha"
+      name="senha"
+      required
+    />
+
+    <button type="submit">
+      {{ modoCadastro ? 'Cadastrar' : 'Entrar' }}
+    </button>
+  </form>
+
+  <span class="toggle" (click)="modoCadastro = !modoCadastro">
+    {{ modoCadastro ? 'Já tenho conta' : 'Criar uma conta' }}
+  </span>
+</div>

@@ -1,11 +1,11 @@
-<!-- Layout institucional (APENAS para páginas internas, ex: /painel) -->
+<!-- Layout institucional (Painel e Simulador) -->
 <ng-container *ngIf="showPainelLayout">
   <header class="app-header">
     <div class="header-content">
 
       <div class="header-text">
-        <h1>Painel de Monitoramento Econômico</h1>
-        <span>Dados oficiais • Banco Central e IBGE</span>
+        <h1>{{ headerTitle }}</h1>
+        <span>{{ headerSubtitle }}</span>
       </div>
 
       <div class="header-logo">
@@ -16,19 +16,17 @@
   </header>
 </ng-container>
 
-<!-- Área principal -->
 <main [class.app-container]="showPainelLayout">
   <router-outlet></router-outlet>
 </main>
 
-<!-- Footer institucional (APENAS para páginas internas) -->
 <ng-container *ngIf="showPainelLayout">
   <footer class="app-footer">
     <div class="footer-content">
-      <p class="footer-title">Monitor Econômico</p>
+      <p class="footer-title">{{ footerTitle }}</p>
 
       <p class="footer-text">
-        Painel de Indicadores Macroeconômicos
+        {{ footerSubtitle }}
       </p>
 
       <p class="footer-text">

@@ -1,0 +1,53 @@
+<section class="simulador">
+
+  <h1>Simulador de Cenários Econômicos</h1>
+  <p class="descricao">
+    Ferramenta de apoio à leitura de cenários macroeconômicos,
+    com base em combinações de inflação, juros e atividade econômica.
+  </p>
+
+  <form class="form-cenario">
+
+    <div class="campo">
+      <label>Inflação</label>
+      <select [(ngModel)]="inflacao" name="inflacao">
+        <option value="baixa">Baixa</option>
+        <option value="media">Controlada</option>
+        <option value="alta">Alta</option>
+      </select>
+    </div>
+
+    <div class="campo">
+      <label>Juros</label>
+      <select [(ngModel)]="juros" name="juros">
+        <option value="baixos">Baixos</option>
+        <option value="neutros">Neutros</option>
+        <option value="altos">Elevados</option>
+      </select>
+    </div>
+
+    <div class="campo">
+      <label>PIB</label>
+      <select [(ngModel)]="pib" name="pib">
+        <option value="crescimento">Crescimento</option>
+        <option value="estavel">Estagnação</option>
+        <option value="recessao">Recessão</option>
+      </select>
+    </div>
+
+    <button type="button" (click)="simular()">Simular cenário</button>
+
+  </form>
+
+  <div class="resultado" *ngIf="resultado">
+    <h2>{{ resultado.titulo }}</h2>
+    <p>{{ resultado.descricao }}</p>
+
+    <ul>
+      <li *ngFor="let impacto of resultado.impactos">
+        {{ impacto }}
+      </li>
+    </ul>
+  </div>
+
+</section>

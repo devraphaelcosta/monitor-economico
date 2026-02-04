@@ -1,0 +1,44 @@
+<div class="user-access">
+
+  <ng-container *ngIf="!auth.isLogado(); else logado">
+    <button class="login-btn" (click)="abrirModal()">
+
+      <!-- Ícone usuário (SVG minimalista) -->
+      <svg
+        class="user-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
+      </svg>
+
+      Entrar / Cadastre-se
+    </button>
+  </ng-container>
+
+  <ng-template #logado>
+    <div class="usuario-logado">
+
+      <!-- Ícone usuário (SVG) -->
+      <svg
+        class="user-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
+      </svg>
+
+      {{ auth.getUsuario()?.nome }}
+
+      <span class="sair" (click)="logout()">Sair</span>
+    </div>
+  </ng-template>
+
+</div>
+
+<app-auth-modal
+  *ngIf="modalAberto"
+  (fecharModal)="fecharModal()">
+</app-auth-modal>
