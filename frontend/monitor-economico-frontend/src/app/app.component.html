@@ -1,36 +1,43 @@
-<header class="app-header">
-  <div class="header-content">
+<!-- Layout institucional (APENAS para páginas internas, ex: /painel) -->
+<ng-container *ngIf="showPainelLayout">
+  <header class="app-header">
+    <div class="header-content">
 
-    <div class="header-text">
-      <h1>Painel de Monitoramento Econômico</h1>
-      <span>Dados oficiais • Banco Central e IBGE</span>
+      <div class="header-text">
+        <h1>Painel de Monitoramento Econômico</h1>
+        <span>Dados oficiais • Banco Central e IBGE</span>
+      </div>
+
+      <div class="header-logo">
+        <img src="brasaobrasil.png" alt="Brasão Institucional">
+      </div>
+
     </div>
+  </header>
+</ng-container>
 
-    <div class="header-logo">
-      <img src="brasaobrasil.png" alt="Brasão Institucional">
-    </div>
-
-  </div>
-</header>
-
-<main class="app-container">
+<!-- Área principal -->
+<main [class.app-container]="showPainelLayout">
   <router-outlet></router-outlet>
 </main>
 
-<footer class="app-footer">
-  <div class="footer-content">
-    <p class="footer-title">Monitor Econômico</p>
+<!-- Footer institucional (APENAS para páginas internas) -->
+<ng-container *ngIf="showPainelLayout">
+  <footer class="app-footer">
+    <div class="footer-content">
+      <p class="footer-title">Monitor Econômico</p>
 
-    <p class="footer-text">
-      Painel de Indicadores Macroeconômicos
-    </p>
+      <p class="footer-text">
+        Painel de Indicadores Macroeconômicos
+      </p>
 
-    <p class="footer-text">
-      Fontes: Banco Central do Brasil (BCB) • IBGE
-    </p>
+      <p class="footer-text">
+        Fontes: Banco Central do Brasil (BCB) • IBGE
+      </p>
 
-    <p class="footer-author">
-      Desenvolvido por Raphael Costa © {{ currentYear }}
-    </p>
-  </div>
-</footer>
+      <p class="footer-author">
+        Desenvolvido por Raphael Costa © {{ currentYear }}
+      </p>
+    </div>
+  </footer>
+</ng-container>

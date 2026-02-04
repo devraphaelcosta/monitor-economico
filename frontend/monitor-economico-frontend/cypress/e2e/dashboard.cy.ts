@@ -1,7 +1,7 @@
 describe('Dashboard Econômico', () => {
 
   it('deve exibir o painel e os principais indicadores', () => {
-    cy.visit('http://localhost:4200');
+    cy.visit('http://localhost:4200/painel');
 
     // Valida o título principal da página
     cy.get('h1')
