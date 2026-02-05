@@ -3,6 +3,14 @@
   <header class="app-header">
     <div class="header-content">
 
+      <!-- SETA DE VOLTAR PARA HOME -->
+      <button
+        class="back-btn"
+        routerLink="/"
+        title="Voltar para a Home">
+        ←
+      </button>
+
       <div class="header-text">
         <h1>{{ headerTitle }}</h1>
         <span>{{ headerSubtitle }}</span>
@@ -23,6 +31,7 @@
 <ng-container *ngIf="showPainelLayout">
   <footer class="app-footer">
     <div class="footer-content">
+
       <p class="footer-title">{{ footerTitle }}</p>
 
       <p class="footer-text">
@@ -36,6 +45,7 @@
       <p class="footer-author">
         Desenvolvido por Raphael Costa © {{ currentYear }}
       </p>
+
     </div>
   </footer>
 </ng-container>

@@ -1,0 +1,41 @@
+/* Header institucional */
+.app-header {
+  position: relative;
+}
+
+/* Container do conteúdo */
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* tudo à esquerda */
+  padding-left: 24px; /* respiro geral do header */
+}
+
+/* Botão de voltar (seta) */
+.back-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 22px;
+  cursor: pointer;
+
+  padding: 6px 8px;
+  border-radius: 6px;
+  margin-right: 12px; /* espaço entre seta e título */
+
+  transition: background 0.2s ease, opacity 0.2s ease;
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Texto do header */
+.header-text {
+  text-align: left;
+}
+
+/* Logo à direita */
+.header-logo {
+  margin-left: auto; /* empurra o brasão pra direita */
+}
