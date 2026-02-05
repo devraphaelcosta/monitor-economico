@@ -33,7 +33,7 @@ export class AppComponent {
         if (url.startsWith('/painel')) {
           this.showPainelLayout = true;
 
-          this.headerTitle = 'Painel de Monitoramento Econômico';
+          this.headerTitle = 'Panel de Monitoramento Econômico';
           this.headerSubtitle = 'Dados oficiais • Banco Central e IBGE';
 
           this.footerTitle = 'Monitor Econômico';
