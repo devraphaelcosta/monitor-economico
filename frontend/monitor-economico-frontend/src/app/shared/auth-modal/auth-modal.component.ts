@@ -21,7 +21,7 @@ export class AuthModalComponent {
   senha = '';
 
   carregando = false;
-  erro = '';
+  erro: string | null = null;
 
   constructor(private auth: AuthService) {}
 
@@ -29,8 +29,12 @@ export class AuthModalComponent {
     this.fecharModal.emit();
   }
 
+  limparErro() {
+    this.erro = null;
+  }
+
   submit() {
-    this.erro = '';
+    this.erro = null;
     this.carregando = true;
 
     if (this.modoCadastro) {
@@ -38,10 +42,12 @@ export class AuthModalComponent {
         next: () => {
           this.modoCadastro = false;
           this.carregando = false;
-          alert('Cadastro realizado! Faça login.');
         },
-        error: () => {
-          this.erro = 'Erro ao cadastrar usuário';
+        error: (err) => {
+          this.erro =
+            err?.error?.error ||
+            err?.error?.message ||
+            'Erro ao cadastrar usuário';
           this.carregando = false;
         }
       });
@@ -53,8 +59,11 @@ export class AuthModalComponent {
           this.carregando = false;
           this.fechar();
         },
-        error: () => {
-          this.erro = 'Email ou senha inválidos';
+        error: (err) => {
+          this.erro =
+            err?.error?.error ||
+            err?.error?.message ||
+            'Email ou senha inválidos';
           this.carregando = false;
         }
       });

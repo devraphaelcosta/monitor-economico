@@ -4,12 +4,14 @@
   <h2>{{ modoCadastro ? 'Criar conta' : 'Entrar' }}</h2>
 
   <form (ngSubmit)="submit()">
+
     <input
       *ngIf="modoCadastro"
       type="text"
       placeholder="Nome"
       [(ngModel)]="nome"
       name="nome"
+      (input)="limparErro()"
       required
     />
 
@@ -18,6 +20,7 @@
       placeholder="Email"
       [(ngModel)]="email"
       name="email"
+      (input)="limparErro()"
       required
     />
 
@@ -26,15 +29,26 @@
       placeholder="Senha"
       [(ngModel)]="senha"
       name="senha"
+      (input)="limparErro()"
       required
     />
 
-    <button type="submit">
-      {{ modoCadastro ? 'Cadastrar' : 'Entrar' }}
+    <!-- mensagem de erro -->
+    <div class="erro" *ngIf="erro">
+      {{ erro }}
+    </div>
+
+    <button type="submit" [disabled]="carregando">
+      {{ carregando
+        ? 'Processando...'
+        : modoCadastro ? 'Cadastrar' : 'Entrar' }}
     </button>
   </form>
 
-  <span class="toggle" (click)="modoCadastro = !modoCadastro">
+  <span
+    class="toggle"
+    (click)="modoCadastro = !modoCadastro; limparErro()"
+  >
     {{ modoCadastro ? 'Já tenho conta' : 'Criar uma conta' }}
   </span>
 </div>
