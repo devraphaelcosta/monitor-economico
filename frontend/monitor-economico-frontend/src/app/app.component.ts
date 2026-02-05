@@ -33,20 +33,11 @@ export class AppComponent {
         if (url.startsWith('/painel')) {
           this.showPainelLayout = true;
 
-          this.headerTitle = 'Painel de Monitoramento Econômico';
+          this.headerTitle = 'Panel de Monitoramento Econômico';
           this.headerSubtitle = 'Dados oficiais • Banco Central e IBGE';
 
           this.footerTitle = 'Monitor Econômico';
           this.footerSubtitle = 'Painel de Indicadores Macroeconômicos';
-
-        } else if (url.startsWith('/simulador')) {
-          this.showPainelLayout = true;
-
-          this.headerTitle = 'Simulador de Cenários Econômicos';
-          this.headerSubtitle = 'Análise qualitativa do cenário macroeconômico';
-
-          this.footerTitle = 'Simulador Econômico';
-          this.footerSubtitle = 'Ferramenta de apoio à leitura de cenários';
 
         } else {
           this.showPainelLayout = false;
