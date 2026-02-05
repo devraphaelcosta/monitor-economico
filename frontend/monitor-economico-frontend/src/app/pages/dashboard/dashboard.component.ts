@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IndicatorCardComponent } from '../../components/indicator-card/indicator-card.component';
 import { EconomicChartComponent } from '../../shared/components/economic-chart/economic-chart.component';
 import { IndicadoresService } from '../../core/services/indicadores.service';
+import { AuthService } from '../../shared/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import html2canvas from 'html2canvas';
@@ -21,6 +22,15 @@ import jsPDF from 'jspdf';
 })
 export class DashboardComponent implements OnInit {
 
+  // ======================
+  // USUÁRIO / PDF
+  // ======================
+  usuarioNome = '';
+  dataGeracao = '';
+
+  // ======================
+  // INDICADORES SELECIONADOS
+  // ======================
   indicadoresSelecionados = {
     selic: false,
     ipca: false,
@@ -75,13 +85,23 @@ export class DashboardComponent implements OnInit {
     new Date().setFullYear(new Date().getFullYear() - 4)
   );
 
-  constructor(private indicadoresService: IndicadoresService) {}
+  constructor(
+    private indicadoresService: IndicadoresService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.definirDatasPadrao();
     this.carregarIndicadores();
+
+    const usuario = this.authService.getUsuario();
+    this.usuarioNome = usuario?.nome || 'Usuário não identificado';
+    this.dataGeracao = new Date().toLocaleString('pt-BR');
   }
 
+  // ======================
+  // DATAS PADRÃO
+  // ======================
   definirDatasPadrao() {
     const hoje = new Date();
 
@@ -91,7 +111,6 @@ export class DashboardComponent implements OnInit {
     const trintaDiasAtras = new Date();
     trintaDiasAtras.setDate(hoje.getDate() - 30);
 
-    // Mensais
     this.selicInicio = this.formatarMesAno(umAnoAtras);
     this.selicFim = this.formatarMesAno(hoje);
 
@@ -101,7 +120,6 @@ export class DashboardComponent implements OnInit {
     this.pibInicio = this.formatarMesAno(umAnoAtras);
     this.pibFim = this.formatarMesAno(hoje);
 
-    // Diário
     this.cambioInicio = this.formatarData(trintaDiasAtras);
     this.cambioFim = this.formatarData(hoje);
   }
@@ -110,6 +128,9 @@ export class DashboardComponent implements OnInit {
     this.carregarIndicadores();
   }
 
+  // ======================
+  // CARREGAR INDICADORES
+  // ======================
   carregarIndicadores() {
 
     // ===== SELIC =====
@@ -175,6 +196,9 @@ export class DashboardComponent implements OnInit {
       });
   }
 
+  // ======================
+  // FORMATADORES
+  // ======================
   formatarMesAno(date: Date): string {
     const mes = String(date.getMonth() + 1).padStart(2, '0');
     return `${date.getFullYear()}-${mes}`;
@@ -189,7 +213,11 @@ export class DashboardComponent implements OnInit {
     return `${periodo.substring(4, 6)}/${periodo.substring(0, 4)}`;
   }
 
+  // ======================
+  // EXPORTAÇÃO PDF
+  // ======================
   async exportarPDF() {
+
     const nenhum =
       !this.indicadoresSelecionados.selic &&
       !this.indicadoresSelecionados.ipca &&
@@ -202,7 +230,20 @@ export class DashboardComponent implements OnInit {
     }
 
     const pdf = new jsPDF('p', 'mm', 'a4');
-    let y = 10;
+    let y = 40;
+
+    // HEADER SOMENTE NA PRIMEIRA PÁGINA
+    pdf.setFontSize(14);
+    pdf.text('Monitor Econômico BNDES', 10, 15);
+
+    pdf.setFontSize(10);
+    pdf.text(`Relatório gerado por: ${this.usuarioNome}`, 10, 22);
+    pdf.text(`Data de geração: ${this.dataGeracao}`, 10, 28);
+
+    pdf.setLineWidth(0.5);
+    pdf.line(10, 32, 200, 32);
+
+    const ALTURA_MAX = 120; // <-- chave para caber mais de um dashboard
 
     const indicadores = [
       { id: 'export-selic', ativo: this.indicadoresSelecionados.selic },
@@ -217,13 +258,15 @@ export class DashboardComponent implements OnInit {
       const el = document.getElementById(ind.id);
       if (!el) continue;
 
-      const canvas = await html2canvas(el, { scale: 2 });
+      const canvas = await html2canvas(el, { scale: 1.7 });
       const img = canvas.toDataURL('image/png');
-      const h = (canvas.height * 190) / canvas.width;
 
-      if (y + h > 280) {
+      let h = (canvas.height * 190) / canvas.width;
+      if (h > ALTURA_MAX) h = ALTURA_MAX;
+
+      if (y + h > 270) {
         pdf.addPage();
-        y = 10;
+        y = 10; // páginas seguintes sem header
       }
 
       pdf.addImage(img, 'PNG', 10, y, 190, h);
